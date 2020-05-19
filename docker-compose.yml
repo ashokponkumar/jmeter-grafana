@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    influxdb:
+        image: influxdb:1.8.0-alpine
+        volumes:
+            - "./data/influxdb:/var/lib/influxdb"
+        environment:
+            - INFLUXDB_DB=jmeter
+    grafana:
+        image: grafana/grafana:6.7.3        
+        volumes:
+            - "./config/grafana/datasources/:/etc/grafana/provisioning/datasources/"
+        ports:
+            - "3000:3000"
+        depends_on: 
+            - "influxdb"
+    jmeter:
+        image: justb4/jmeter:5.1.1
+        depends_on: 
+            - "influxdb"
+
+
